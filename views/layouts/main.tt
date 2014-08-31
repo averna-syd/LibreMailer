@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8" />
+  <title>[% settings.appname %]</title>
+  <meta name="description" content="Email Marketing" />
+  <meta name="keywords" content="email marketing mail email mailing lists" />
+  <meta name="author" content="Sarah Fuller - sarah@averna.id.au" />
+  <meta name="robots" content="index,follow" />
+  <meta http-equiv="Content-type" content="text/html; charset=[% settings.charset %]" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/bootstrap-3.1.1-dist/css/bootstrap.min.css" >
+  <link rel="stylesheet" href="/font-awesome-4.0.3/css/font-awesome.min.css" >
+  <link rel="stylesheet" href="/css/bootstrap-select.min.css" >
+  <link rel="stylesheet" href="/datetimepicker-master/jquery.datetimepicker.css" >
+  <link rel="stylesheet" href="/css/style-1.0.css" >
+  <script src="/javascripts/jquery-2.1.1.min.js"></script>
+  <script src="/bootstrap-3.1.1-dist/js/bootstrap.min.js"></script>
+  <script src="/javascripts/bootstrap-select.min.js"></script>
+  <script src="/javascripts/jquery-ui-1.10.4.min.js"></script>
+  <script type="text/javascript" src="/tinymce/js/tinymce/tinymce.min.js"></script>
+  <script type="text/javascript" src="/tinymce/js/tinymce/jquery.tinymce.min.js"></script>
+  <script type="text/javascript" src="/datetimepicker-master/jquery.datetimepicker.js"></script>
+  <script type="text/javascript" src="/Chart.js-master/Chart.min.js"></script>
+</script>
+ </head>
+ <body>
+  <div id="preimg"></div>
+    <!-- Docs master nav -->
+ <header id="main-navbar" class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
+  <div class="container">
+    <div class="navbar-header">
+      <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a href="/" class="navbar-brand ">[% settings.appname %]</a>
+    </div>
+[% IF session.logged_in_user %]
+    <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+                <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-users"></i> Contact Lists <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li class="main-menu"><a href="/lists" class=""><i class="fa fa-users"></i> View Contact Lists</a></li>
+                  <li class="main-menu"><a href="/lists/add" class=""><i class="fa fa-users"></i> Create a Contact List</a></li>
+                  <li class="main-menu"><a href="/lists/upload" class=""><i class="fa fa-users"></i> Upload Contacts to a Contact List</a></li>
+                </ul>
+        </li>
+        <li class="dropdown">
+                <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-user"></i> Contacts <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li class="main-menu"><a href="/contacts" class=""></i><i class="fa fa-user"></i> View All Contacts</a></li>
+                  <li class="main-menu"><a href="/contacts/add" class=""><i class="fa fa-user"></i> Add a Contact</a></li>
+                </ul>
+        </li>
+        <li class="dropdown">
+                <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-envelope-o"></i> Email Campaigns <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li class="main-menu"><a href="/campaigns" class=""><i class="fa fa-envelope-o"></i> View Email Campaigns</a></li>
+                  <li class="main-menu"><a href="/campaigns/add" class=""><i class="fa fa-envelope-o"></i> Create an Email Campaign</a></li>
+                </ul>
+        </li>
+        <li class="dropdown">
+                <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="fa fa-signal"></i> Statistics <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li class="main-menu"><a href="/statistics" class=""><i class="fa fa-signal"></i> Email Campaign Statistics</a></li>
+                </ul>
+        </li>
+        [% IF session.admin %]
+        <li class="dropdown adminonly">
+                <a data-toggle="dropdown" class="dropdown-toggle" href="#">Admin <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li class="dropdown-header">User Management</li>
+                  <li class="main-menu"><a href="/users" class=""><i class="fa fa-users"></i> View Users</a></li>
+                  <li class="main-menu"><a href="/roles" class=""><i class="fa fa-users"></i> View Roles</a></li>
+                  <li class="main-menu"><a href="/users/add" class=""><i class="fa fa-user"></i> Add a User</a></li>
+                </ul>
+        </li>
+        [% END %]
+      </ul>
+      <ul class="nav navbar-nav pull-right">
+        <li class="dropdown">
+                <a id="main-menu-user" data-toggle="dropdown" class="dropdown-toggle" href="#">Signed in as [% session.firstname %] [% session.lastname %]<b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li class="main-menu"><a id="main-my-account" href="/users/edit/[% session.user_id %]" class=""><i class="fa fa-user"></i> My account</a></li>
+                  <li class="divider"></li>
+                  <li class="main-menu"><a id="signout-btn" href="/logout"><i class="fa fa-sign-out"></i> Sign out</a></li>
+                </ul>
+        </li>
+      </ul>
+    </nav>
+[% END %]
+  </div>
+</header>
+
+<div id="swheel" class="modal fade">
+  <div class="modal-dialog">
+    <div id="swheel-content" class="modal-content">
+      <div class="modal-body">
+        <i id="swheel-spinner" class="fa fa-spinner fa-spin fa-4x"></i>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+<div id="wrap" class="container">
+<div id="main-alerts">
+
+    <div id="alert-success" class="alert alert-success [% UNLESS flash.success %]display-none[% END %]">
+        <button type="button" class="close alert-btn">&times;</button>
+        <div id="alert-success-msg">[% flash.success %]</div>
+    </div>
+
+    <div id="alert-info" class="alert alert-info [% UNLESS flash.info %]display-none[% END %]">
+        <button type="button" class="close alert-btn">&times;</button>
+        <div id="alert-info-msg">[% flash.info %]</div>
+    </div>
+
+    <div id="alert-warning" class="alert alert-warning [% UNLESS flash.waring %]display-none[% END %]">
+        <button type="button" class="close alert-btn">&times;</button>
+        <div id="alert-warning-msg">[% flash.warning %]</div>
+    </div>
+
+    <div id="alert-danger" class="alert alert-danger [% UNLESS flash.error %]display-none[% END %]"> 
+        <button type="button" class="close alert-btn">&times;</button>
+        <div id="alert-danger-msg">[% flash.error %]</div>
+    </div>
+
+</div>
+
+[% IF session.logged_in_user %]
+<div id="main-content" class="content container-fluid">
+[% END %]
+
+<!--[if lte IE 7]>
+<div class="alert alert-danger">
+ <button type="button" class="close alert-btn">&times;</button>
+ <div>This version of Internet Explorer is not supported. Please upgrade to Internet Explorer 8 or above.</div>
+</div>
+<![endif]-->
+
+[% content %]
+
+[% IF session.logged_in_user %]
+</div>
+[% END %]
+
+<div class="container"><br><br><br><br><br></div>
+</div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">
+        <table class="table-100">
+        <tr>
+        <td class="text-right">
+            <span><a href="#">[% settings.appname %] [% settings.VERSION %]</a>
+            &nbsp;&copy;&nbsp;2014 - [% settings.YEAR %] <a href="mailto:sarah@averna.id.au">Sarah Fuller</a></span>
+        </td>
+        <td class="footer-center-td">
+        </td>
+        <td class="text-left">
+            <span>Released <a href="http://www.gnu.org/licenses/gpl-3.0-standalone.html">GPLv3 license</a></span>
+            <span>Powered by <a href="http://perldancer.org/">Dancer</a></span>
+        </td>
+        </tr>
+        </table>
+
+        </p>
+      </div>
+    </div>
+
+
+
+<script>
+$(function() {
+
+$('.container > .content table').addClass('table table-striped');
+$('input[type="submit"]').addClass('btn btn-default');
+$('input[type="button"]').addClass('btn btn-default');
+$('[name="html_body"]').addClass('mceEditor');
+$("textarea").height(250);
+$("textarea").width('94%');
+ 
+[% IF ! session.admin %]
+$('.adminonly').hide();
+[% END %]
+
+$.swShow = function () {
+    $('#swheel').modal('show');
+};
+
+function stopSwheel () {
+    $("html, body").animate({ scrollTop: 0 }, "fast");
+    $('#swheel').modal('hide');
+}
+
+$.swHide = function () {
+    setTimeout( stopSwheel, 500 );
+};
+
+$.nl2br = function (str) {   
+    var breakTag = '<br>'; 
+    return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1'+ breakTag +'$2');
+};
+
+    $.flashsuccess = function( param ) {
+        $('.alert').hide();
+        $.swHide();
+        $('#alert-success-msg').text('');
+        $('#alert-success-msg').append(param);
+        $('#alert-success').fadeIn(); 
+    };
+
+    $.flashinfo = function( param ) {
+        $('.alert').hide();
+        $.swHide();
+        $('#alert-info-msg').text('');
+        $('#alert-info-msg').append(param);
+        $('#alert-info').fadeIn(); 
+    };
+
+    $.flashwarning = function( param ) {
+        $('.alert').hide();
+        $.swHide();
+        $('#alert-warning-msg').text('');
+        $('#alert-warning-msg').append(param);
+        $('#alert-warning').fadeIn(); 
+    };
+
+    $.flashdanger = function( param ) {
+        $('.alert').hide();
+        $.swHide();
+        $('#alert-danger-msg').text('');
+        $('#alert-danger-msg').append(param);
+        $('#alert-danger').fadeIn(); 
+    };
+
+    $('.alert-btn').click(function(e) {
+         e.preventDefault();
+         $('.alert').hide(); 
+    });
+
+    $.backend = function ( type, data, url, callback ) {
+
+           $.ajax({
+                type: type,
+                url: url,
+                dataType: "json",
+                data: data,
+                success: callback,
+                cache: false,
+
+                statusCode: {
+                    400: function ( error ) {
+                        var json = JSON.parse(error.responseText);
+                        var text = $.nl2br( json.error );
+                        $.flashdanger(text);
+                        $("html, body").animate({ scrollTop: 0 }, "fast");
+                    },
+                    401: function ( error ) {
+                        var json = JSON.parse(error.responseText);
+                        var text = $.nl2br( json.error );
+                        $.flashdanger(text);
+                        $("html, body").animate({ scrollTop: 0 }, "fast");
+                    },
+                    403: function ( error ) {
+                        var json = JSON.parse(error.responseText);
+                        var text = $.nl2br( json.error );
+                        $.flashdanger(text);
+                        $("html, body").animate({ scrollTop: 0 }, "fast");
+                    },
+                    404: function ( error ) {
+                        var json = JSON.parse(error.responseText);
+                        var text = $.nl2br( json.error );
+                        $.flashdanger(text);
+                        $("html, body").animate({ scrollTop: 0 }, "fast");
+                    },
+                    410: function ( error ) {
+                        var json = JSON.parse(error.responseText);
+                        var text = $.nl2br( json.error );
+                        $.flashdanger(text);
+                        $("html, body").animate({ scrollTop: 0 }, "fast");
+                    },
+                    500: function () {
+                        $.flashdanger('A server-side error has occurred');
+                        $("html, body").animate({ scrollTop: 0 }, "fast");
+                    },
+                    503: function () {
+                        $.flashdanger('A server-side error has occurred');
+                        $("html, body").animate({ scrollTop: 0 }, "fast");
+                    }
+                },
+                error: function () {
+                    $.flashdanger('A server-side error has occurred');
+                    $("html, body").animate({ scrollTop: 0 }, "fast");
+                },
+            });
+    };
+
+    $.geturlvars = function getUrlVars()
+    {
+        var vars = [], hash;
+        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+
+        for(var i = 0; i < hashes.length; i++)
+        {
+            hash = hashes[i].split('=');
+            vars.push(hash[0]);
+            vars[hash[0]] = hash[1];
+        }
+    
+        return vars;
+    };
+
+});
+</script>
+
+</body>
+</html>

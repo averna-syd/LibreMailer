@@ -1,0 +1,69 @@
+# EDIT: THIS IS REALLY IMPORTANT, session cookie key must be set with a unqiue random key
+session_cookie_key: "<EDIT: CEaKJfEM~&8iO>"
+
+# Session expires in seconds
+session_expires: 28800
+
+# EDIT: THIS IS REALLY IMPORTANT, url key must be set with a unqiue random key
+url_key: "<EDIT: W4B-XM!dv#NV>"
+
+# EDIT: The timezone you wish the app to use
+timezone: "Australia/Sydney"
+
+# EDIT: The smtp server used for sending mail
+smtp_server: '<EDIT: HOSTNAME>:<EDIT: PORT (i.e 25)>'
+
+# EDIT: The base url of the application. Required by the cron job sending out mail.
+base_url: '<EDIT: HTTP OR HTTPS ABSOLUTE URL TO APP i.e http://libremailer.averna.id.au>'
+
+# EDIT: Reply address used for collecting bounce messages. Address Must match bounce mailbox details below for
+# bounce message processing to work.
+email_from: '<EDIT: INSERT EMAIL ADDRESS HERE>'
+
+# EDIT: Secure pop3 account details to login into email_from address
+# WARNING: This must be a dedicated mailbox to bounce messages as all messages will be deleted after processing.
+process_bounce_messages: '<EDIT: 1 OR 0>'
+pop3_bounce_ssl_host: '<EDIT: POP3 HOSTNAME>:<EDIT: POP3 PORT (i.e 995)>'
+pop3_bounce_username: '<EDIT: POP3 USERNAME>'
+pop3_bounce_password: '<EDIT: POP3 PASSWORD>'
+
+plugins:
+
+  # EDIT: Database settings
+  Database:
+    driver: 'mysql'
+    database: 'libremailer'
+    host: 'localhost'
+    port: '3306'
+    username: '<EDIT: DATABASE USERNAME>'
+    password: '<EDIT: DATABASE PASSWORD>'
+    connection_check_threshold: 10
+    dbi_params:
+      RaiseError: 1
+      AutoCommit: 1
+    log_queries: 1
+
+  Auth::Extensible:
+    no_default_pages: 1
+    no_login_handler: 1
+    realms:
+      users:
+        provider: 'Database'
+
+# SETTINGS BELOW THIS POINT DO NOT REQUIRE MODIFICATION.
+  Passphrase:
+    default: bcrypt
+    bcrypt:
+      cost: 20
+
+appname: 'LibreMailer'
+serializer: 'JSON'
+session: 'cookie'
+charset: 'UTF-8'
+layout: 'main'
+template: 'template_toolkit'
+engines:
+ template_toolkit:
+   encoding: 'utf8'
+   start_tag: '[%'
+   end_tag: '%]'

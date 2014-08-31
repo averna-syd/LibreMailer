@@ -1,0 +1,30 @@
+    <div id="signin-container" class="container">
+        <div class="content">
+            <div class="row">
+                <div id="signin-form-main" class="login-form"><br>
+<form id="login" role="form" method="post" action="/login">
+    <div class="form-group">
+    </div>
+  <div id="signin-username-ctl" class="form-group">
+    <label for="signin-username">Username</label>
+
+<input id="signin-username" name="username" type="text" value=""  class="form-control" placeholder="username or email" />
+<div class="help-block with-errors"></div>
+</div>
+  <div id="signin-password-ctl" class="form-group">
+    <label for="signin-password">Password</label>
+    <input id="signin-password" type="password" class="form-control" name="password" placeholder="Password">
+    <span id="signin-password-msg" class="help-block"></span>
+  </div>
+  <button id="signin-btn" type="submit" class="btn btn-default"><i class="fa fa-sign-in"></i> Sign in</button>
+</form>
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div> 
+
+<input id="signin-request-path" class="display-none" type="hidden" value="[% IF session.request_path %][% session.request_path %][% ELSE %]/[% END %]">

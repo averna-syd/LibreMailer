@@ -1,0 +1,3 @@
+<h3>Link Statistics</h3>
+<hr class="hr_header">
+[% simple_crud %]

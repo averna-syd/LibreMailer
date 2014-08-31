@@ -1,0 +1,145 @@
+INSTALL README
+
+Author: Sarah fuller (sarah@averna.id.au)
+
+This is a quick howto to get you up and running. This howto assumes you will be using a normal linux system account named libremailer and MySQL is installed locally. For deployment its assumed you'll be using perlbrew, plack and nginx. However this is only one way to deploy a dancer app. If you'd like to deplay another way I'd suggest checking out: https://metacpan.org/pod/Dancer::Deployment
+
+# DATABASE
+
+1) From within the MySQL client create a MySQL database called libremailer
+
+    CREATE DATABASE libremailer
+
+2) From within the MySQL client create a database user
+
+    CREATE USER 'libremailer'@'localhost' IDENTIFIED BY 'insert your password here';
+
+3) Give user privileges
+
+    GRANT ALL PRIVILEGES ON libremailer.* TO 'libremailer'@'localhost';
+
+4) From the command line insert database schema into our new database (schema file located: APPDIR/sql/libremailer.sql
+
+    mysql -u libremailer -p libremailer < sql/libremailer.sql
+
+
+# SYSTEM USER
+
+1) Add a new system user called libremailer
+
+    adduser libremailer
+
+2 ) Become this user and stay as this user for perl install
+
+    su - libremailer
+
+3) Create app directory
+
+    mkdir /home/libremailer/app
+
+4) Copy libremailer app into this directory
+    
+    cp -r <Libre Mailer Directory>/* /home/libremailer/app/
+
+5) Ensure all files are owned by libremailer
+
+    chown -R libremailer:libremailer /home/libremailer/app
+
+
+# EDIT APP CONFIG
+
+1) Edit the app config ensuing all settings are correct for your envrionment (instructions inside config)
+
+    vi /home/libremailer/app/config.yml
+
+
+# PERL INSTALL ( as user libremailer )
+
+1) Install perlbrew
+
+    curl -L http://install.perlbrew.pl | bash
+
+2) Install perl via perlbrew into your homedir.
+
+    echo 'source ~/perl5/perlbrew/etc/bashrc' >> ~/.bashrc
+    source ~/.bashrc
+    ~/perl5/perlbrew/bin/perlbrew install -v perl-5.18.2 -Dusethreads --as perl-5.18.2_WITH_THREADS
+    ~/perl5/perlbrew/bin/perlbrew switch perl-5.18.2_WITH_THREADS
+
+3) Install cpanm via perlbrew into your homedir
+
+    ~/perl5/perlbrew/bin/perlbrew install-cpanm
+
+4) Install modules required via perlbrew into your homedir
+
+    ~/perl5/perlbrew/bin/cpanm -i Moo Template strictures Try::Tiny DateTime DateTime::Format::MySQL Email::Valid Test::More YAML JSON JSON::Any Dancer Dancer::Template::TemplateToolkit Dancer::Session::Cookie Dancer::Plugin::REST Dancer::Plugin::Passphrase Dancer::Plugin::Database Dancer::Plugin::FlashMessage Data::Dumper DBD::mysql Plack::Runner Plack::Handler::Starman Parallel::ForkManager HTML::LinkExtractor Email::Stuff Email::Send Email::Valid Mail::POP3Client IO::Socket::SSL Mail::DeliveryStatus::BounceParser Text::CSV Dancer::Plugin::SimpleCRUD Dancer::Plugin::Auth::Extensible MIME::Base64::URLSafe Crypt::CBC Crypt::Blowfish
+
+
+# DEPLOYMENT
+
+1) As root Copy APP init script to /etc/init.d/libremailer.sh (requires fuser)
+
+    cp <Libre Mailer Directory>/bin/example_init.sh /etc/init.d/libremailer.sh
+
+2) Ensure it can be executed
+
+    chmod 755 /etc/init.d/libremailer
+
+3) Test the script and ensure it starts a boot time (check your distros docs)
+   The usual gotchas are the paths and ensuring you've set the correct user (i.e webserver user)
+
+4) Assuming you already have nginx installed, setup a virtual host for your app like so:
+
+upstream libremailer {
+        server unix:/var/tmp/._dancer_libremailer.sock;
+    }
+
+server {
+  listen 80;
+  server_name my.domain.com;
+
+  access_log  /var/log/nginx/libremailer.access.log;
+  error_log  /var/log/nginx/libremailer.error.log;
+
+  location ~* \.(js|css|png|jpg|jpeg|gif|ico)$ {
+   expires 30d;
+   log_not_found off;
+  }
+
+
+  root /home/libremailer/app/public;
+      location / {
+        try_files $uri @proxy;
+        access_log off;
+      }
+
+      location @proxy {
+            proxy_no_cache $cookie_nocache  $arg_nocache$arg_comment;
+            proxy_no_cache $http_pragma     $http_authorization;
+            proxy_cache_bypass   $cookie_nocache  $arg_nocache$arg_comment;
+            proxy_cache_bypass   $http_pragma     $http_authorization;
+            proxy_set_header Host $http_host;
+            proxy_set_header X-Forwarded-Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_pass       http://libremailer;
+      }
+
+}
+
+
+# CRON JOB
+
+1) If you want campaigns to send you'll need to make sure you have setup the cron job as the libremailer user
+
+    */5 * * * * /home/libremailer/perl5/perlbrew/perls/perl-5.18.2_WITH_THREADS/bin/perl /home/libremailer/app/bin/worker.pl
+
+
+DONE! 
+
+You can now login using the default admin login
+
+username: admin
+password: admin
+
+Don't forget to reset the password ;)

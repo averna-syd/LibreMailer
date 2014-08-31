@@ -1,0 +1,4 @@
+<h3>Lists</h3>
+<hr class="hr_header">
+
+[% simple_crud %]

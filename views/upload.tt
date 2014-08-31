@@ -1,0 +1,33 @@
+<h3>Upload Contacts to a Contact List</h3>
+<hr class="hr_header">
+
+<form action="/lists/upload" method="post" enctype="multipart/form-data">
+<p>Required fields in CSV file: <b>"email"</b>, <b>"firstname"</b>, <b>"lastname"</b>.<br></p>
+<p style="font-size: 12px;">Optional fields in CSV file: <b>"format"</b>, <b>"confirmation"</b>, <b>"status"</b>.<br></p>
+<p style="font-size: 12px;">
+Field <b>"format"</b> default is <b>"HTML"</b> but accepts inputs: <b>"HTML",</b> <b>"Text"</b>.<br>
+Field <b>"confirmation"</b> default is <b>"Confirmed"</b> but accepts inputs: <b>"Confirmed"</b>, <b>"Unconfirmed"</b>.<br>
+Field <b>"status"</b> default is <b>"Active"</b> but accepts inputs: <b>"Active"</b>, <b>"Unsubscribed"</b>, <b>"Bounced"</b>.<br>
+</p>
+<p>Fields that are <b>highlighted</b> are required.</p>
+<table class="table table-striped">
+<tbody><tr valign="top">
+ <td><b>Contact List</b></td>
+ <td>
+  <select name="list_id" id="list_id">
+  <option value="" selected="selected">-select-</option>
+  [% FOREACH list IN lists %]    
+  <option value="[% list.id %]">[% list.name %]</option>
+  [% END %]
+  </select>
+ </td>
+</tr>
+<tr valign="top">
+  <td><b>CSV File</b></td>
+  <td><input type="file" name="file"></td>
+</tr>
+<tr valign="top">
+  <td align="center" colspan="2"><input type="submit" value="Submit" name="_submit" id="_submit" class="btn btn-default"></td>
+</tr>
+</tbody></table>
+</form> 

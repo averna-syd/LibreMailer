@@ -1,0 +1,3 @@
+<h3>Bounce Statistics</h3>
+<hr class="hr_header">
+[% simple_crud %]

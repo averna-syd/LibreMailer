@@ -1,0 +1,8 @@
+<h3>Denied</h3>
+<hr class="hr_header">
+[% IF session.denied_msg %]
+<p>[% session.denied_msg %]</p>
+[% ELSE %]
+<p>I'm sorry [% session.firstname %], I'm afraid I can't do that, I think you know what the problem is just as well as I do. Please contact your administrator if you require assistance.</p>
+[% END %]
+<p>It might be best to try the <a href="/">home page</a>.</p>

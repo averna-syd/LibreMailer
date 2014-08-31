@@ -1,0 +1,54 @@
+=pod
+
+=head1 Libre Mailer
+
+Libre Mailer is a modest and simple web based email marketing application. The entire app was made in only one weekend to prove a point, procrastinate from real work but most importantly stave off boredom.
+While it might have been knocked out over a weekend and thus a bit light on features it does work! It does send out email campaigns and produces statistics (open statistics, Link statistics, Bounce statistics) etc.
+
+
+=head2 Website demo
+
+  http://libremailer.averna.id.au/
+
+  Login: admin
+  Password: admin
+
+
+=head2 Install
+
+
+  SEE: INSTALL.README 
+
+
+
+=head2 Feedback / Reporting bugs / Contact
+
+This was a weekend project for the fun of it. I'll fix any serious bugs if someone is ACTUALLY using this but I make no promises regarding any new features.
+
+
+=head2 Acknowledgements
+
+This app uses a lot of other outstanding open source projects and without them it wouldn't have been possible.
+
+
+=head2 License
+
+    LibreMailer copyright (C) 2014 Sarah Fuller
+
+    See LICENSE.README for a full copy of the GPLv3 license.
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+=cut

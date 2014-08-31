@@ -1,0 +1,69 @@
+<h3>Report Statistics for [% stats.campaign_name %]</h3>
+<hr class="hr_header">
+<br><br>
+<h4>Open Statistics</h4>
+<hr class="hr_header">
+<div style="width: 100%">
+  <canvas id="opens" width="450" height="450"/>
+</div>
+<br>
+<p style="padding-left: 20px;">Opened: [% opens.opened %]&nbsp;&nbsp;&nbsp;&nbsp;Unopened: [% opens.unopened %]&nbsp;&nbsp;&nbsp;&nbsp;Bounced: [% opens.bounced %]</p>
+<br><br>
+<h4>Link Statistics</h4>
+<hr class="hr_header">
+<div style="width: 100%">
+  <canvas id="canvas" height="450" width="600"></canvas>
+</div>
+<br>
+<p style="padding-left: 20px;">[% FOREACH link IN links %]<a href="[% link.destination %]">[% link.name %]</a>: [% link.count %]&nbsp;&nbsp;&nbsp;&nbsp;[% END %]</p>
+
+    <script>
+        var pieData = [
+                {
+                    value: [% opens.bounced %],
+                    color:"#F7464A",
+                    highlight: "#FF5A5E",
+                    label: "Bounced"
+                },
+                {
+                    value: [% opens.opened %],
+                    color: "#46BFBD",
+                    highlight: "#5AD3D1",
+                    label: "Opened"
+                },
+                {
+                    value: [% opens.unopened %],
+                    color: "#949FB1",
+                    highlight: "#A8B3C5",
+                    label: "Unopened"
+                },
+
+            ];
+
+    var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
+
+    var barChartData = {
+        labels : [[% FOREACH link IN links %]"[% link.name %]",[% END %]],
+        datasets : [
+            {
+                fillColor : "rgba(220,220,220,0.5)",
+                strokeColor : "rgba(220,220,220,0.8)",
+                highlightFill: "rgba(220,220,220,0.75)",
+                highlightStroke: "rgba(220,220,220,1)",
+                data : [[% FOREACH link IN links %]"[% link.count %]",[% END %]]
+            },
+        ]
+
+    }
+
+    window.onload = function(){
+        var ctx1 = document.getElementById("opens").getContext("2d");
+        var ctx2 = document.getElementById("canvas").getContext("2d");
+
+        window.myPie = new Chart(ctx1).Pie(pieData);
+        window.myBar = new Chart(ctx2).Bar(barChartData, {
+            responsive : true
+        });
+    }
+
+    </script>
