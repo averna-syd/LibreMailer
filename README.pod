@@ -13,6 +13,7 @@ While it might have been knocked out over a weekend and thus a bit light on feat
   Login: admin
   Password: admin
 
+  The database is reset every twelve hours.
 
 =head2 Install
 

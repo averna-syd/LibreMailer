@@ -105,7 +105,7 @@ server {
   access_log  /var/log/nginx/libremailer.access.log;
   error_log  /var/log/nginx/libremailer.error.log;
 
-  location ~* \.(js|css|png|jpg|jpeg|gif|ico)$ {
+  location ~* \.(js|css|png|jpg|jpeg|ico)$ {
    expires 30d;
    log_not_found off;
   }
