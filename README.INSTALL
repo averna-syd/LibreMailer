@@ -45,6 +45,10 @@ This is a quick howto to get you up and running. This howto assumes you will be 
 
     chown -R libremailer:libremailer /home/libremailer/app
 
+6) Make the upload directory world writable (don't worry nothing is stored in there for very long)
+
+    chmod 777 /home/libremailer/app/uploads    
+
 
 # EDIT APP CONFIG
 
